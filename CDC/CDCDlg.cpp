@@ -106,6 +106,10 @@ BOOL CCDCDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+	x1 = 20;	x2 = 20;	x3 = 20;	x4 = 20;	x5 = 20;
+	y1 = 20;	y2 = 20;	y3 = 20;	y4 = 20;	y5 = 20;
+	
+
 	// 更改static text的文字格式
 	m_font.CreatePointFont(150, L"宋体");
 	m_static_year.SubclassDlgItem(IDC_STATIC3, this);
@@ -168,7 +172,83 @@ void CCDCDlg::OnPaint()
 	}
 	else
 	{
-		CDialogEx::OnPaint();
+
+		//-----布置界面，使用一个静态文本控件，调整其大小后作为你的绘图区域。------
+		CWnd* pWnd = GetDlgItem(IDC_STATIC_DRAW);
+		CDC* dc = pWnd->GetDC();
+		pWnd->Invalidate();
+		pWnd->UpdateWindow();
+
+		CRect rectView;
+		CRgn rgn;
+		GetDlgItem(IDC_STATIC_DRAW)->GetWindowRect(&rectView);
+		ScreenToClient(&rectView);
+		rgn.CreateRectRgn(rectView.left, rectView.top, rectView.right, rectView.bottom);
+		dc->SelectClipRgn(&rgn);
+
+		CPaintDC newdc(this);
+		newdc.SelectClipRgn(&rgn);
+
+		CPen pNewPen(PS_SOLID, 4, RGB(0, 0, 0));
+		CBrush yellowBrush(RGB(255, 255, 0));//选中新笔
+		CPen* pOldPen = newdc.SelectObject(&pNewPen);//选中新画刷
+
+		//画黄色圆形
+		CBrush* pOldBrush = newdc.SelectObject(&yellowBrush);
+		CRect yellowEclipse(rectView);
+		yellowEclipse.left += x1;
+		yellowEclipse.top += y1;
+		yellowEclipse.right -= x1;
+		yellowEclipse.bottom -= y1;
+		newdc.Ellipse(yellowEclipse);
+		newdc.SelectObject(pOldPen);
+		newdc.SelectObject(pOldBrush);
+
+		//画红色矩形
+		pOldPen = newdc.SelectObject(&pNewPen);
+		CBrush redBrush(RGB(255, 0, 0));
+		pOldBrush = newdc.SelectObject(&redBrush);
+		CRect redRect(rectView);
+		redRect.left += x2 + 58;
+		redRect.top += y2 + 58;
+		redRect.right -= x2 + 58;
+		redRect.bottom -= y2 + 58;
+		newdc.Rectangle(redRect);
+		newdc.SelectObject(pOldBrush);
+
+		// 画绿色矩形
+		pOldPen = newdc.SelectObject(&pNewPen);
+		CBrush greeBrush(RGB(0, 255, 0));
+		pOldBrush = newdc.SelectObject(&greeBrush);
+		CRect greeRect(rectView);
+		greeRect.left += x3 + 80;
+		greeRect.top += y3 + 80;
+		greeRect.right -= x3 + 80;
+		greeRect.bottom -= y3 + 80;
+		newdc.Rectangle(greeRect);
+		newdc.SelectObject(pOldBrush);
+
+		//画深蓝色矩形
+		 pOldPen = newdc.SelectObject(&pNewPen);
+		CBrush navyblueBrush(RGB(0, 0, 255));
+		pOldBrush = newdc.SelectObject(&navyblueBrush);
+		CRect navyblueRect(rectView);
+		navyblueRect.left += x4 + 100;
+		navyblueRect.top += y4 + 100;
+		navyblueRect.right -= x4 + 100;
+		navyblueRect.bottom -= y4 + 100;
+		newdc.Rectangle(navyblueRect);
+		newdc.SelectObject(pOldBrush);
+
+		//画浅蓝色圆形
+		CBrush lightbrueBrush(RGB(0, 255, 255));
+		pOldBrush = newdc.SelectObject(&lightbrueBrush);
+		rectView.left += x5 + 100;
+		rectView.top += y5 + 100;
+		rectView.right -= x5 + 100;
+		rectView.bottom -= y5 + 100;
+		newdc.Ellipse(rectView);
+		newdc.SelectObject(pOldBrush);
 	}
 }
 

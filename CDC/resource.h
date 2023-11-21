@@ -20,9 +20,11 @@
 #define IDC_STATIC5                     1011
 #define IDC_STATIC3                     1012
 #define IDC_STATIC_YEAR                 1013
+#define IDC_STATIC_DRAW                 1013
 #define IDC_STATIC_MONTH                1014
 #define IDC_STATIC_TIME                 1015
 #define IDC_STATIC_DAY                  1016
+#define IDC_STATIC_YEAR2                1017
 
 // Next default values for new objects
 // 

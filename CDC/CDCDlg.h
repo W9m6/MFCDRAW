@@ -36,6 +36,8 @@ private:
 protected:
 	HICON m_hIcon;
 
+	int x1, x2, x3, x4, x5;
+	int y1, y2, y3, y4, y5;
 	// 生成的消息映射函数
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
