@@ -31,9 +31,7 @@ public:
 // 实现
 protected:
 	DECLARE_MESSAGE_MAP()
-public:
-//	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
-	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
@@ -47,6 +45,7 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 //	ON_WM_CTLCOLOR()
+//ON_WM_CTLCOLOR()
 ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
@@ -64,6 +63,8 @@ CCDCDlg::CCDCDlg(CWnd* pParent /*=nullptr*/)
 void CCDCDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_SLIDERX, Sliderx);
+	DDX_Control(pDX, IDC_SLIDERY, Slidery);
 }
 
 BEGIN_MESSAGE_MAP(CCDCDlg, CDialogEx)
@@ -71,6 +72,7 @@ BEGIN_MESSAGE_MAP(CCDCDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_WM_CTLCOLOR()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -106,30 +108,23 @@ BOOL CCDCDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+	UpdateStaticText();
+
+	// 设置时钟频率 每秒更新一次时间
+	SetTimer(1, 1000, NULL);
+	// 初始化坐标
 	x1 = 20;	x2 = 20;	x3 = 20;	x4 = 20;	x5 = 20;
 	y1 = 20;	y2 = 20;	y3 = 20;	y4 = 20;	y5 = 20;
-	
-
-	// 更改static text的文字格式
-	m_font.CreatePointFont(150, L"宋体");
-	m_static_year.SubclassDlgItem(IDC_STATIC3, this);
-	m_static_year.SetFont(&m_font);
-	m_static_month.SubclassDlgItem(IDC_STATIC4, this);
-	m_static_month.SetFont(&m_font);
-	m_static_day.SubclassDlgItem(IDC_STATIC5, this);
-	m_static_day.SetFont(&m_font);
-
-
-	// 获取时间
-	UpdateStaticText();
-	m_static_YEAR.SubclassDlgItem(IDC_STATIC_YEAR, this);
-	m_static_YEAR.SetFont(&m_font);
-	m_static_MONTH.SubclassDlgItem(IDC_STATIC_MONTH, this);
-	m_static_MONTH.SetFont(&m_font);
-	m_static_DAY.SubclassDlgItem(IDC_STATIC_DAY, this);
-	m_static_DAY.SetFont(&m_font);
-	m_static_TIME.SubclassDlgItem(IDC_STATIC_TIME, this);
-	m_static_TIME.SetFont(&m_font);
+	Sliderx.SetPos(20);
+	Slidery.SetPos(20);
+	pointx = Sliderx.GetPos();
+	pointy = Slidery.GetPos();
+	// 设置字体
+	myFont.CreateFont(20, 0, 0, 0, FW_NORMAL, FALSE, FALSE, 0, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"宋体");
+	GetDlgItem(IDC_STATIC_YEAR)->SetFont(&myFont);
+	GetDlgItem(IDC_STATIC_MONTH)->SetFont(&myFont);
+	GetDlgItem(IDC_STATIC_DAY)->SetFont(&myFont);
+	GetDlgItem(IDC_STATIC_TIME)->SetFont(&myFont);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -172,8 +167,6 @@ void CCDCDlg::OnPaint()
 	}
 	else
 	{
-
-		//-----布置界面，使用一个静态文本控件，调整其大小后作为你的绘图区域。------
 		CWnd* pWnd = GetDlgItem(IDC_STATIC_DRAW);
 		CDC* dc = pWnd->GetDC();
 		pWnd->Invalidate();
@@ -193,7 +186,7 @@ void CCDCDlg::OnPaint()
 		CBrush yellowBrush(RGB(255, 255, 0));//选中新笔
 		CPen* pOldPen = newdc.SelectObject(&pNewPen);//选中新画刷
 
-		//画黄色圆形
+		// 绘制黄色圆形
 		CBrush* pOldBrush = newdc.SelectObject(&yellowBrush);
 		CRect yellowEclipse(rectView);
 		yellowEclipse.left += x1;
@@ -204,51 +197,58 @@ void CCDCDlg::OnPaint()
 		newdc.SelectObject(pOldPen);
 		newdc.SelectObject(pOldBrush);
 
-		//画红色矩形
+		// 绘制红色矩形
 		pOldPen = newdc.SelectObject(&pNewPen);
 		CBrush redBrush(RGB(255, 0, 0));
 		pOldBrush = newdc.SelectObject(&redBrush);
 		CRect redRect(rectView);
-		redRect.left += x2 + 58;
-		redRect.top += y2 + 58;
-		redRect.right -= x2 + 58;
-		redRect.bottom -= y2 + 58;
+		redRect.left += x2 + 80;
+		redRect.top += y2 + 80;
+		redRect.right -= x2 + 80;
+		redRect.bottom -= y2 + 80;
 		newdc.Rectangle(redRect);
 		newdc.SelectObject(pOldBrush);
 
-		// 画绿色矩形
+		// 绘制绿色矩形
 		pOldPen = newdc.SelectObject(&pNewPen);
 		CBrush greeBrush(RGB(0, 255, 0));
 		pOldBrush = newdc.SelectObject(&greeBrush);
 		CRect greeRect(rectView);
-		greeRect.left += x3 + 80;
-		greeRect.top += y3 + 80;
-		greeRect.right -= x3 + 80;
-		greeRect.bottom -= y3 + 80;
+		greeRect.left += x3 + 100;
+		greeRect.top += y3 + 100;
+		greeRect.right -= x3 + 100;
+		greeRect.bottom -= y3 + 100;
 		newdc.Rectangle(greeRect);
 		newdc.SelectObject(pOldBrush);
 
-		//画深蓝色矩形
+		// 绘制深蓝色矩形
 		 pOldPen = newdc.SelectObject(&pNewPen);
 		CBrush navyblueBrush(RGB(0, 0, 255));
 		pOldBrush = newdc.SelectObject(&navyblueBrush);
 		CRect navyblueRect(rectView);
-		navyblueRect.left += x4 + 100;
-		navyblueRect.top += y4 + 100;
-		navyblueRect.right -= x4 + 100;
-		navyblueRect.bottom -= y4 + 100;
+		navyblueRect.left += x4 + 120;
+		navyblueRect.top += y4 + 120;
+		navyblueRect.right -= x4 + 120;
+		navyblueRect.bottom -= y4 + 120;
 		newdc.Rectangle(navyblueRect);
 		newdc.SelectObject(pOldBrush);
 
-		//画浅蓝色圆形
+		// 绘制浅蓝色圆形
 		CBrush lightbrueBrush(RGB(0, 255, 255));
 		pOldBrush = newdc.SelectObject(&lightbrueBrush);
-		rectView.left += x5 + 100;
-		rectView.top += y5 + 100;
-		rectView.right -= x5 + 100;
-		rectView.bottom -= y5 + 100;
+		rectView.left += x5 + 120;
+		rectView.top += y5 + 120;
+		rectView.right -= x5 + 120;
+		rectView.bottom -= y5 + 120;
 		newdc.Ellipse(rectView);
 		newdc.SelectObject(pOldBrush);
+
+		// 绘制姓名学号
+		newdc.SelectObject(&myFont);
+		newdc.SetBkMode(TRANSPARENT);//设置背景透明
+		newdc.TextOut(70, 230, L"姓名:王淼");
+		newdc.TextOut(70, 250, L"学号：E42114038");
+
 	}
 }
 
@@ -258,23 +258,6 @@ void CCDCDlg::OnPaint()
 HCURSOR CCDCDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
-}
-
-
-HBRUSH CAboutDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
-{
-	HBRUSH hbr = CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
-
-	// TODO:  在此更改 DC 的任何特性
-	//将ID为IDC_STATIC的static控件字体颜色设置为红色
-
-	if (pWnd->GetDlgCtrlID() == IDC_STATIC_YEAR)
-	{
-		pDC->SetTextColor(RGB(255, 0, 0));
-
-	}
-	// TODO:  如果默认的不是所需画笔，则返回另一个画笔
-	return hbr;
 }
 
 
@@ -301,5 +284,37 @@ void CCDCDlg::UpdateStaticText() {
 
 
 
+void CCDCDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	UpdateStaticText();
+
+}
 
 
+HBRUSH CCDCDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	HBRUSH hbr = CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
+
+	// TODO:  在此更改 DC 的任何特性
+	if (pWnd->GetDlgCtrlID() == IDC_STATIC_YEAR)
+	{
+		pDC->SetTextColor(RGB(255, 0, 0));
+	}
+	if (pWnd->GetDlgCtrlID() == IDC_STATIC_MONTH)
+	{
+		pDC->SetTextColor(RGB(255, 0, 0));
+	}
+	if (pWnd->GetDlgCtrlID() == IDC_STATIC_DAY)
+	{
+		pDC->SetTextColor(RGB(255, 0, 0));
+	}
+	if (pWnd->GetDlgCtrlID() == IDC_STATIC_TIME)
+	{
+		pDC->SetTextColor(RGB(255, 0, 0));
+	}
+
+
+	// TODO:  如果默认的不是所需画笔，则返回另一个画笔
+	return hbr;
+}

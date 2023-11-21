@@ -36,8 +36,13 @@ private:
 protected:
 	HICON m_hIcon;
 
+	//自定义全局变量，用来控制图形移动
 	int x1, x2, x3, x4, x5;
 	int y1, y2, y3, y4, y5;
+	// 自定义滑块移动距离
+	int pointx, pointy;
+	// 设置字体
+	CFont myFont;
 	// 生成的消息映射函数
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
@@ -48,4 +53,8 @@ protected:
 	
 public:
 	
+	CSliderCtrl Sliderx;
+	CSliderCtrl Slidery;
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 };
