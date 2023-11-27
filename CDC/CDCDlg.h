@@ -57,4 +57,10 @@ public:
 	CSliderCtrl Slidery;
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	afx_msg void OnBnClickedRadioYellw();
+	afx_msg void OnBnClickedRadioGreen();
+	afx_msg void OnBnClickedRadioRed();
+	afx_msg void OnBnClickedRadioDarkbule();
+	afx_msg void OnBnClickedRadioLightbule();
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 };

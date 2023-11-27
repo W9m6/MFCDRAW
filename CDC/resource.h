@@ -31,7 +31,6 @@
 #define IDC_STATIC_MONTH                1014
 #define IDC_STATIC_TIME                 1015
 #define IDC_STATIC_DAY                  1016
-#define IDC_STATIC_MONTH2               1017
 #define IDC_STATIC_YEAR                 1017
 
 // Next default values for new objects

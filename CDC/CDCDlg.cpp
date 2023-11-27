@@ -44,8 +44,6 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
-//	ON_WM_CTLCOLOR()
-//ON_WM_CTLCOLOR()
 ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
@@ -65,6 +63,7 @@ void CCDCDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_SLIDERX, Sliderx);
 	DDX_Control(pDX, IDC_SLIDERY, Slidery);
+
 }
 
 BEGIN_MESSAGE_MAP(CCDCDlg, CDialogEx)
@@ -73,6 +72,12 @@ BEGIN_MESSAGE_MAP(CCDCDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_WM_CTLCOLOR()
 	ON_WM_TIMER()
+	ON_BN_CLICKED(IDC_RADIO_YELLW, &CCDCDlg::OnBnClickedRadioYellw)
+	ON_BN_CLICKED(IDC_RADIO_GREEN, &CCDCDlg::OnBnClickedRadioGreen)
+	ON_BN_CLICKED(IDC_RADIO_RED, &CCDCDlg::OnBnClickedRadioRed)
+	ON_BN_CLICKED(IDC_RADIO_DARKBULE, &CCDCDlg::OnBnClickedRadioDarkbule)
+	ON_BN_CLICKED(IDC_RADIO_LIGHTBULE, &CCDCDlg::OnBnClickedRadioLightbule)
+	ON_WM_HSCROLL()
 END_MESSAGE_MAP()
 
 
@@ -115,10 +120,13 @@ BOOL CCDCDlg::OnInitDialog()
 	// 初始化坐标
 	x1 = 20;	x2 = 20;	x3 = 20;	x4 = 20;	x5 = 20;
 	y1 = 20;	y2 = 20;	y3 = 20;	y4 = 20;	y5 = 20;
+	Sliderx.SetRange(0, 100); // 设置 X 轴的范围
+	Sliderx.SetRange(0, 100); // 设置 Y 轴的范围
 	Sliderx.SetPos(20);
 	Slidery.SetPos(20);
 	pointx = Sliderx.GetPos();
 	pointy = Slidery.GetPos();
+	
 	// 设置字体
 	myFont.CreateFont(20, 0, 0, 0, FW_NORMAL, FALSE, FALSE, 0, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, L"宋体");
 	GetDlgItem(IDC_STATIC_YEAR)->SetFont(&myFont);
@@ -191,8 +199,8 @@ void CCDCDlg::OnPaint()
 		CRect yellowEclipse(rectView);
 		yellowEclipse.left += x1;
 		yellowEclipse.top += y1;
-		yellowEclipse.right -= x1;
-		yellowEclipse.bottom -= y1;
+		yellowEclipse.right += x1;
+		yellowEclipse.bottom += y1;
 		newdc.Ellipse(yellowEclipse);
 		newdc.SelectObject(pOldPen);
 		newdc.SelectObject(pOldBrush);
@@ -317,4 +325,123 @@ HBRUSH CCDCDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 
 	// TODO:  如果默认的不是所需画笔，则返回另一个画笔
 	return hbr;
+}
+
+
+void CCDCDlg::OnBnClickedRadioYellw()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	UpdateData(TRUE);
+	Sliderx.SetPos(x1);
+	Slidery.SetPos(y1);
+
+	x1 = Sliderx.GetPos();
+	y1 = Slidery.GetPos();
+	CCDCDlg::OnPaint();
+}
+
+
+void CCDCDlg::OnBnClickedRadioGreen()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	UpdateData(TRUE);
+	Sliderx.SetPos(x3);
+	Slidery.SetPos(y3);
+
+	x3 = Sliderx.GetPos();
+	y3 = Slidery.GetPos();
+	CCDCDlg::OnPaint();
+}
+
+
+void CCDCDlg::OnBnClickedRadioRed()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	UpdateData(TRUE);
+	Sliderx.SetPos(x2);
+	Slidery.SetPos(y2);
+
+	x2 = Sliderx.GetPos();
+	y2 = Slidery.GetPos();
+	CCDCDlg::OnPaint();
+}
+
+
+void CCDCDlg::OnBnClickedRadioDarkbule()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	UpdateData(TRUE);
+	Sliderx.SetPos(x4);
+	Slidery.SetPos(y4);
+
+	x4 = Sliderx.GetPos();
+	y4 = Slidery.GetPos();
+	CCDCDlg::OnPaint();
+}
+
+
+void CCDCDlg::OnBnClickedRadioLightbule()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	UpdateData(TRUE);
+	Sliderx.SetPos(x5);
+	Slidery.SetPos(y5);
+
+	x5 = Sliderx.GetPos();
+	y5 = Slidery.GetPos();
+	CCDCDlg::OnPaint();
+}
+
+
+void CCDCDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+
+	pointx = Sliderx.GetPos();
+	pointy = Slidery.GetPos();
+	// 假设在你的对话框类中
+	CButton* pRadioButtonYellow = (CButton*)GetDlgItem(IDC_RADIO_YELLW);
+	CButton* pRadioButtonRed = (CButton*)GetDlgItem(IDC_RADIO_RED);
+	CButton* pRadioButtonGreen = (CButton*)GetDlgItem(IDC_RADIO_GREEN);
+	CButton* pRadioButtonDarkbule = (CButton*)GetDlgItem(IDC_RADIO_DARKBULE);
+	CButton* pRadioButtonLightbule = (CButton*)GetDlgItem(IDC_RADIO_LIGHTBULE);
+
+	// 获取单选框的状态
+	BOOL isChecked1 = pRadioButtonYellow->GetCheck();
+	BOOL isChecked2 = pRadioButtonRed->GetCheck();
+	BOOL isChecked3 = pRadioButtonGreen->GetCheck();
+	BOOL isChecked4 = pRadioButtonDarkbule->GetCheck();
+	BOOL isChecked5 = pRadioButtonLightbule->GetCheck();
+
+	if (isChecked1)
+	{
+		x1 = pointx;
+		y1 = pointy;
+	}
+
+	if (isChecked2)
+	{
+		x2 = pointx;
+		y2 = pointy;
+	}
+	if (isChecked3)
+	{
+		x3 = pointx;
+		y3 = pointy;
+	}
+	if (isChecked4)
+	{
+		x4 = pointx;
+		y4 = pointy;
+	}
+	if (isChecked5)
+	{
+		x5 = pointx;
+		y5 = pointy;
+
+	}
+	
+	Invalidate();		// 窗口重绘
+	CDialogEx::OnHScroll(nSBCode, nPos, pScrollBar);
+
 }
