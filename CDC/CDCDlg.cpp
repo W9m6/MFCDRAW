@@ -212,8 +212,8 @@ void CCDCDlg::OnPaint()
 		CRect redRect(rectView);
 		redRect.left += x2 + 80;
 		redRect.top += y2 + 80;
-		redRect.right -= x2 + 80;
-		redRect.bottom -= y2 + 80;
+		redRect.right += x2 - 80;
+		redRect.bottom += y2 - 80;
 		newdc.Rectangle(redRect);
 		newdc.SelectObject(pOldBrush);
 
@@ -224,8 +224,8 @@ void CCDCDlg::OnPaint()
 		CRect greeRect(rectView);
 		greeRect.left += x3 + 100;
 		greeRect.top += y3 + 100;
-		greeRect.right -= x3 + 100;
-		greeRect.bottom -= y3 + 100;
+		greeRect.right += x3 - 100;
+		greeRect.bottom += y3 - 100;
 		newdc.Rectangle(greeRect);
 		newdc.SelectObject(pOldBrush);
 
@@ -236,8 +236,8 @@ void CCDCDlg::OnPaint()
 		CRect navyblueRect(rectView);
 		navyblueRect.left += x4 + 120;
 		navyblueRect.top += y4 + 120;
-		navyblueRect.right -= x4 + 120;
-		navyblueRect.bottom -= y4 + 120;
+		navyblueRect.right += x4 - 120;
+		navyblueRect.bottom += y4 - 120;
 		newdc.Rectangle(navyblueRect);
 		newdc.SelectObject(pOldBrush);
 
@@ -246,8 +246,8 @@ void CCDCDlg::OnPaint()
 		pOldBrush = newdc.SelectObject(&lightbrueBrush);
 		rectView.left += x5 + 120;
 		rectView.top += y5 + 120;
-		rectView.right -= x5 + 120;
-		rectView.bottom -= y5 + 120;
+		rectView.right += x5 - 120;
+		rectView.bottom += y5 - 120;
 		newdc.Ellipse(rectView);
 		newdc.SelectObject(pOldBrush);
 
